@@ -14,5 +14,5 @@
 ## 🔗 Ссылки
 [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/%D0%B2%D0%BB%D0%B0%D0%B4%D0%B8%D1%81%D0%BB%D0%B0%D0%B2-%D0%BC%D0%B0%D1%81%D0%BB%D0%BE%D0%B2-295731104/)  
 
-[headhunter](https://hh.ru/resume/4d14dde9ff09d128f60039ed1f7a766f4d3259)
+💼[headhunter](https://hh.ru/resume/4d14dde9ff09d128f60039ed1f7a766f4d3259)
 
