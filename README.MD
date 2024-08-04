@@ -4,7 +4,7 @@
 Всем привет. В этом демонстрационном репозитории хранятся задачи, проекты и кейсы по исследованию данных, A/B-тестированию, продуктовой аналитике, которые я выполнял и которые показались мне интересными. 💼
 
 ## 🛠 Skills
-💻Python(pandas, numpy, pyqt, SQLAlchemy, kafka-python, grafanalib)\n
+💻Python(pandas, numpy, pyqt, SQLAlchemy, kafka-python, grafanalib)/n
 📑SQL(PostgreSQL/Clickhouse)
 📑MongoDB
 📼AirFlow
