@@ -5,7 +5,7 @@
 
 ## 🛠 Skills
 💻Python (pandas, numpy, pyqt, SQLAlchemy, kafka-python, grafanalib)  
-🐧Linux (Debian/Ubuntu/CentOS)
+🐧Linux (Debian/Ubuntu/CentOS)  
 📑SQL (PostgreSQL/Clickhouse/MSSQL)  
 📑MongoDB  
 📼AirFlow  
