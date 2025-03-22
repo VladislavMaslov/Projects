@@ -10,7 +10,7 @@
 📑MongoDB  
 📼AirFlow  
 📟Kibana, Graylog  
-📈📉Grafana, Zabbix
+📈📉Grafana, Zabbix  
 ⬛Docker, Kubernetes
 
 ## 🔗 Ссылки
