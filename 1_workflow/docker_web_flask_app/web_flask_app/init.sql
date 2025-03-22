@@ -1,0 +1,5 @@
+CREATE TABLE test_table (
+    value VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
