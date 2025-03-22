@@ -1,0 +1,28 @@
+version: '3'
+services:
+  gitlab:
+    image: 'gitlab/gitlab-ce:latest'
+    restart: always
+    hostname: 'localhost'
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://localhost:9000/'
+        gitlab_rails['gitlab_shell_ssh_port'] = 2224
+        gitlab_rails['smtp_enable'] = true
+        gitlab_rails['smtp_address'] = "smtp.yandex.ru"
+        gitlab_rails['smtp_port'] = 465
+        gitlab_rails['smtp_user_name'] = "sorban@yandex.ru"
+        gitlab_rails['smtp_password'] = "soussorban226"
+        gitlab_rails['smtp_domain'] = "yandex.ru"
+        gitlab_rails['smtp_authentication'] = "plain"
+        gitlab_rails['smtp_enable_starttls_auto'] = true
+    ports:
+      - '80:80'
+      - '9000:9000'
+      - '443:443'
+      - '22:22'
+      - '2224:22' # SSH port for GitLab
+    volumes:
+      - './config:/etc/gitlab'
+      - './logs:/var/log/gitlab'
+      - './data:/var/opt/gitlab'
