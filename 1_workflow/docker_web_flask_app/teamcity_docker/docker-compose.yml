@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  teamcity-server:
+    image: jetbrains/teamcity-server:latest
+    container_name: teamcity-server
+    ports:
+      - "8111:8111"
+    volumes:
+      - teamcity-server-data:/data/teamcity_server/datadir
+      - teamcity-logs:/opt/teamcity/logs
+    networks:
+      - teamcity-network
+    user: root
+
+  teamcity-agent:
+    image: jetbrains/teamcity-agent:latest
+    container_name: teamcity-agent
+    privileged: true
+    volumes:
+      - ./agents/agent-1/conf:/data/teamcity_agent/conf
+      - /var/run/docker.sock:/var/run/docker.sock  # Подключаем Docker сокет
+    environment:
+      - DOCKER_IN_DOCKER=start
+      - SERVER_URL=http://teamcity-server:8111
+    networks:
+      - teamcity-network
+    user: root
+
+volumes:
+  teamcity-server-data:
+  teamcity-logs:
+  teamcity-agent-conf:
+networks:
+  teamcity-network:
+
