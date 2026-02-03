@@ -1,0 +1,108 @@
+---
+#Создание папок в /opt/docker
+- name: create envoy dir
+  ansible.builtin.file:
+    path: /opt/docker/envoy
+    state: directory
+    mode: '0755'
+
+- name: create envoy-ads dir
+  ansible.builtin.file:
+    path: /opt/docker/envoy-ads
+    state: directory
+    mode: '0755'
+
+- name: create txaccesslog dir
+  ansible.builtin.file:
+    path: /opt/docker/txaccesslog
+    state: directory
+    mode: '0755'
+
+#Копируем папку /opt/envoy
+- name: cp /opt/envoy
+  ansible.builtin.copy:
+    src: opt/envoy  # Из roles/files/opt/envoy
+    dest: /opt/
+    directory_mode: '0755'
+
+#Навешиваем правила на папку с сертами
+- name: certs rules
+  ansible.builtin.file:
+    path: /opt/envoy/certs
+    state: directory
+    owner: root
+    group: root
+    mode: '0644'
+
+#Consul. Замена значений в конфиге
+- name: read Consul config
+  ansible.builtin.slurp:
+    src: /opt/consul/config/config.json
+  register: consul_config_encoded
+
+- name: redact Consul config values
+  ansible.builtin.copy:
+    content: >
+      {{ 
+        consul_config_encoded.content | b64decode | from_json | 
+        combine({
+          'datacenter': consul_dc,
+          'acl': {
+            'tokens': {
+              'default': consul_token
+            }
+          }
+        }, recursive=True) | to_nice_json 
+      }}
+    dest: /opt/consul/config/config.json
+    mode: '0644'
+  register: consul_config_update
+
+- name: restart Consul container
+  community.docker.docker_compose_v2:
+    project_src: /opt/consul/
+    files:
+      - docker-compose.yml
+    state: restarted
+  when: consul_config_update.changed
+
+#Создание компоузов из шаблона
+- name: generate Envoy docker-compose file from template
+  ansible.builtin.template:
+    src: envoy.yml.j2
+    dest: /opt/docker/envoy/docker-compose.yml
+
+- name:  generate envoy-ads docker-compose file from template
+  ansible.builtin.template:
+    src: ads.yml.j2
+    dest: /opt/docker/envoy-ads/docker-compose.yml
+
+- name: generate txaccesslog docker-compose file from template
+  ansible.builtin.template:
+    src: txaccesslog.yml.j2
+    dest: /opt/docker/txaccesslog/docker-compose.yml
+
+#Запуск контейнеров
+- name: Start Envoy ADS
+  community.docker.docker_compose_v2:
+    project_src: /opt/docker/envoy-ads  # Путь к папке с docker-compose.yml
+    files:
+      - docker-compose.yml
+    state: present
+    pull: always
+
+- name: Start Envoy
+  community.docker.docker_compose_v2:
+    project_src: /opt/docker/envoy
+    files:
+      - docker-compose.yml
+    state: present
+    pull: always
+
+- name: Start txaccesslog
+  community.docker.docker_compose_v2:
+    project_src: /opt/docker/txaccesslog
+    files:
+      - docker-compose.yml
+    state: present
+    pull: always

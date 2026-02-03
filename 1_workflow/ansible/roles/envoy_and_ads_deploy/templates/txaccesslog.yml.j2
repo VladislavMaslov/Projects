@@ -1,0 +1,40 @@
+version: "3"
+services:
+  txaccesslog:
+    image: "artifact.local.ru/library/txaccesslog:1.10.0-20.92fa0a1a"
+    logging:
+      driver: "syslog"
+      options:
+        tag: "docker/{% raw %}{{.Name}}/{{.Name}}{% endraw %}-1.10.0-20.92fa0a1a"
+    environment:
+    - "XMS_SIZE=512m"
+    - "XMX_SIZE=1500m"
+    - "OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318/"
+    - "OTEL_SERVICE_NAME=txaccesslog"
+    - "SERVICE_NAME={{ txal_service_name }}"
+    - "REMOTE_CONFIG={{ txal_remote_config }}"
+    - "MAIN_CLASS=tx.accesslog.AccessLogMain"
+    - "DOCKERIZED=yeah"
+    - "OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf"
+    - "OTEL_LOGS_EXPORTER=otlp"
+    - "OTEL_RESOURCE_ATTRIBUTES=service.version=1.10.0%2B20.92fa0a1a"
+    - "JMX_PORT=31902"
+    - "GRPC_PORT=31903"
+    - "STATUS_PORT=31904"
+    - "CLUSTER_PORT=31905"
+    - "EVENTBUS_PORT=31906"
+    restart: "always"
+    ports:
+    - "0.0.0.0:31902:31902"
+    - "0.0.0.0:31903:31903"
+    - "0.0.0.0:31904:31904"
+    - "0.0.0.0:31905:31905"
+    - "0.0.0.0:31906:31906"
+    volumes:
+    - "/opt/envoy/txaccesslog:/opt/envoy/txaccesslog"
+    container_name: "txaccesslog"
+    stop_grace_period: "60s"
+networks:
+  default:
+    external:
+      name: "examplenet"

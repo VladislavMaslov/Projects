@@ -1,0 +1,9 @@
+---
+- name: Deploy Envoy and Ads
+  hosts: all #Хосты по умолчанию
+  become: yes  #Стать root
+  collections:
+    - community.docker
+
+  roles:
+    - envoy_and_ads_deploy

@@ -1,0 +1,32 @@
+version: "3"
+services:
+  envoy-ads:
+    image: "artifact.local.ru/library/envoy-ads:2.0-146.cd15e80a"
+    logging:
+      driver: "syslog"
+      options:
+        tag: "docker/{% raw %}{{.Name}}/{{.Name}}{% endraw %}-2.0-146.cd15e80a"
+    environment:
+    - "XMX_SIZE=512m"
+    - "SERVICE_NAME={{ ads_service_name }}"
+    - "REMOTE_CONFIG={{ ads_remote_config }}"
+    - "MAIN_CLASS=tx.ads.Main"
+    - "DOCKERIZED=yeah"
+    - "GRPC_PORT=55855"
+    - "STATUS_PORT=55756"
+    - "JMX_PORT=55757"
+    restart: "always"
+    ports:
+    - "0.0.0.0:55855:55855"
+    - "0.0.0.0:55756:55756"
+    - "0.0.0.0:55757:55757"
+    volumes:
+    - "/var/lib/envoy-ads:/var/lib/envoy-ads"
+    container_name: "envoy-ads"
+    stop_grace_period: "60s"
+    security_opt:
+    - "seccomp:unconfined"
+networks:
+  default:
+    external:
+      name: "examplenet"

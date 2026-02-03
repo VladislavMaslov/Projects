@@ -1,0 +1,14 @@
+# Переменные для Envoy
+envoy_service_name: "prd-xxxx-envoy"
+
+# Переменные для Envoy ADS
+ads_service_name: "prd-xxxx-envoy-ads"
+ads_remote_config: "prd/xxxx/envoy-ads"
+
+# Переменные для txaccesslog
+txal_service_name: "prd-xxxx-txaccesslog"
+txal_remote_config: "prd/xxxx/txaccesslog"
+
+# Переменные для Consul
+consul_dc: "dc-pp"
+consul_token: "xxxx-xxxx-xxxx-xxxx"

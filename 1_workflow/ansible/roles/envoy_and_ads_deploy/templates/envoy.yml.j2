@@ -1,0 +1,39 @@
+version: "3"
+services:
+  envoy:
+    image: "artifact.local.ru/library/grpc-envoy:v1.36.2-259.f61e27b4"
+    logging:
+      driver: "syslog"
+      options:
+        tag: "docker/{% raw %}{{.Name}}/{{.Name}}{% endraw %}-v1.36.2-259.f61e27b4"
+    environment:
+    - "ADS_HOST=envoy-ads"
+    - "ADS_PORT=55855"
+    - "TAGS=build=v1.36.2-259.f61e27b4"
+    - "PORT=80"
+    - "SERVICE_NAME={{ envoy_service_name }}"
+    - "DOCKERIZED=yeah"
+    - "ADMIN_PORT=9901"
+    - "SUPERADMIN_PORT=9909"
+    - "GRPC_WEB=80"
+    - "SSL_GRPC_WEB=443"
+    - "GRPC_PORT=8881"
+    - "HTTP3_GRPC_WEB=443"
+    restart: "always"
+    ports:
+    - "0.0.0.0:9901:9901"
+    - "127.0.0.1:9909:9909"
+    - "0.0.0.0:80:80"
+    - "0.0.0.0:443:443"
+    - "0.0.0.0:8881:81"
+    - "0.0.0.0:443:443/udp"
+    volumes:
+    - "/opt/envoy:/opt/envoy"
+    container_name: "envoy"
+    stop_grace_period: "60s"
+    security_opt:
+    - "seccomp:unconfined"
+networks:
+  default:
+    external:
+      name: "examplenet"
